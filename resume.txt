@@ -1,0 +1,26 @@
+Jane Doe
+Email: jane@example.com
+Phone: +1 555 010 1234
+LinkedIn: https://linkedin.com/in/janedoe
+GitHub: https://github.com/janedoe
+
+Headline: Python Developer
+
+Professional Summary:
+Python Developer focused on automation, data handling, and simple web projects.
+
+Skills:
+Python, JSON, HTML, CSS, Git, API integration
+
+Education:
+B.Tech in Computer Science, GLA University, 2026
+
+Experience:
+Software Intern at CodeLab, June 2025 to August 2025. Built Python scripts for data cleaning and report generation.
+
+Projects:
+Resume Portfolio Generator: Python application that reads resume text, calls Gemini, parses JSON, and generates HTML.
+Student Result Analyzer: Python project that processes CSV data and creates summary reports.
+
+Achievements:
+Completed AIML GLA Bootcamp 2026 project milestone.

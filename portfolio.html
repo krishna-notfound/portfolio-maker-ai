@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generated Portfolio</title>
+    <style>
+:root {
+    --ink: #191919;
+    --muted: #6b7280;
+    --paper: #fbfbf7;
+    --page: #dfe7e2;
+    --line: #b9c5bf;
+    --accent: #b42318;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+    font-family: Georgia, "Times New Roman", serif;
+    line-height: 1.65;
+}
+
+.page {
+    width: min(980px, calc(100% - 28px));
+    margin: 28px auto;
+    background: var(--paper);
+    border-left: 8px solid var(--accent);
+    padding: 42px;
+}
+
+.hero {
+    margin-bottom: 30px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 2.7rem;
+    line-height: 1;
+}
+
+.headline {
+    margin: 10px 0 0;
+    color: var(--accent);
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 700;
+}
+
+.contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    margin-top: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.95rem;
+}
+
+a {
+    color: var(--accent);
+}
+
+.section {
+    border-top: 1px solid var(--line);
+    padding-top: 18px;
+    margin-top: 22px;
+}
+
+h2 {
+    margin: 0 0 8px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+p,
+ul {
+    margin: 0;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+li + li {
+    margin-top: 7px;
+}
+
+@media (max-width: 640px) {
+    .page {
+        width: min(100% - 18px, 980px);
+        margin: 9px auto;
+        padding: 26px;
+        border-left-width: 5px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+}
+
+    </style>
+</head>
+<body>
+<main class="page">
+<section class="hero">
+<h1>Jane Doe</h1>
+<p class="headline">Python Developer</p>
+<div class="contact"><a href="mailto:jane@example.com">jane@example.com</a>
+<span>+1 555 010 1234</span>
+<a href="https://linkedin.com/in/janedoe" target="_blank" rel="noreferrer">https://linkedin.com/in/janedoe</a>
+<a href="https://github.com/janedoe" target="_blank" rel="noreferrer">https://github.com/janedoe</a></div>
+</section>
+<section class="section"><h2>Professional Summary</h2><p>Python Developer focused on automation, data handling, and simple web projects.</p></section>
+<section class="section"><h2>Skills</h2><ul><li>Python</li><li>JSON</li><li>HTML</li><li>CSS</li><li>Git</li><li>API integration</li></ul></section>
+<section class="section"><h2>Education</h2><ul><li>B.Tech in Computer Science: Institution: GLA University</li></ul></section>
+<section class="section"><h2>Experience</h2><ul><li>CodeLab. Built Python scripts for data cleaning and report generation</li></ul></section>
+<section class="section"><h2>Projects</h2><ul><li>Resume Portfolio Generator: Python application that reads resume text, calls Gemini, parses JSON, and generates HTML</li><li>Student Result Analyzer: Python project that processes CSV data and creates summary reports</li></ul></section>
+<section class="section"><h2>Achievements</h2><ul><li>Completed AIML GLA Bootcamp 2026 project milestone.</li></ul></section>
+</main>
+</body>
+</html>
