@@ -1,53 +1,160 @@
-# AI-Assisted Portfolio Generator
+# AI-Assisted Resume Portfolio Generator
 
-This project is an end-to-end Streamlit application that transforms raw, unstructured resume text into a complete, structured portfolio website. It leverages the **Google Gemini API** (`gemini-2.5-flash`) for intelligent data extraction and parsing.
+This project converts one plain-text resume into a local portfolio webpage.
 
-## Features
+Workflow:
 
-- **Automated Parsing**: Extracts Name, Contact Info, Summary, Education, Experience, Projects, Skills, and Achievements from unstructured text.
-- **Privacy First (PII Masking)**: Uses regular expressions to detect and redact sensitive information (like SSNs and Credit Card numbers) *before* sending data to the AI model.
-- **Deterministic JSON Output**: Uses advanced prompt engineering and API configurations to guarantee the model returns strictly formatted JSON.
-- **Hallucination Detection**: Includes a post-processing algorithm to verify that the extracted skills and links actually appear in the original text, flagging any potential AI fabrications.
-- **Live Preview & Export**: Generates a responsive HTML/CSS template with a live preview and one-click download.
+1. Put resume content in `resume.txt`.
+2. Run `python main.py`.
+3. Gemini returns structured JSON.
+4. Python validates and normalizes the JSON.
+5. Python inserts the data into `template.html` and `style.css`.
+6. The final webpage is saved as `portfolio.html`.
 
-## Setup & Installation
+## Technologies
 
-1. **Clone the repository** (or download the files):
-   Ensure you have `app.py` in your working directory.
+- Python
+- Google Gemini API
+- JSON
+- HTML
+- CSS
+- pytest
 
-2. **Install dependencies**:
-   You need Python 3.9+ installed. Install the required libraries using pip:
-   ```bash
-   pip install streamlit google-genai
-   ```
+## Setup
 
-3. **Get a Gemini API Key**:
-   Visit [Google AI Studio](https://aistudio.google.com/app/apikey) to generate a free API key.
+Install Python 3.9 or newer.
 
-4. **Run the application**:
-   ```bash
-   streamlit run app.py
-   ```
+```bash
+pip install -r requirements.txt
+```
 
-## Technical Details
+Create a `.env` file from `.env.example`:
 
-### 1. Privacy Pre-processing (Masking)
-Before sending the user's resume to the Gemini API, the text is passed through a `mask_pii()` function. This function uses Python's `re` (regex) library to identify patterns that look like Social Security Numbers (e.g., `XXX-XX-XXXX`) or 16-digit credit card numbers. It replaces these matches with `[REDACTED SSN]` or `[REDACTED CC]`, ensuring sensitive data never leaves the user's machine.
+```text
+GEMINI_API_KEY=your_real_api_key_here
+GEMINI_MODEL=gemini-2.5-flash
+```
 
-### 2. Prompt Engineering & Deterministic JSON
-To reliably power our Streamlit UI and HTML generator, we need structured data, not conversational text. 
-We achieve this by:
-- Defining a strict Expected JSON Structure within the system prompt.
-- Explicitly instructing the model *not* to include markdown wrappers (like ` ```json `).
-- Setting `response_mime_type="application/json"` in the `GenerateContentConfig` of the `google-genai` SDK. This forces the Gemini model to output purely valid JSON.
+Do not commit `.env` or screenshots that reveal the API key.
 
-### 3. Hallucination Check Logic
-Large Language Models sometimes "hallucinate" or infer information that wasn't explicitly stated. For example, if the resume says "Web Development", the AI might hallucinate specific skills like "HTML" or "CSS".
-Our `check_hallucinations()` function performs a basic safety check:
-1. It converts the original raw text to lowercase.
-2. It iterates through the arrays of extracted `Skills` and `Links` provided by the API.
-3. If an extracted skill or link substring is *not* found in the original text, it flags it as a potential hallucination and alerts the user in the UI.
+## Run
 
-## File Structure
-- `app.py`: The main Streamlit application containing UI, API logic, and HTML generation.
-- `README.md`: This documentation file.
+### Interactive CLI Tool (Default)
+
+Simply run:
+
+```bash
+python main.py
+```
+
+When run interactively in a terminal, the program presents an interactive menu asking:
+1. Which template design to use (`classic`, `compact`, or `modern`).
+2. Input resume file path (default: `resume.txt`).
+3. Output portfolio HTML path (default: `portfolio.html`).
+
+### Non-Interactive / CLI Flag Usage
+
+You can also pass command-line options directly or run non-interactively:
+
+```bash
+# Specify template directly
+python main.py --template modern
+
+# Specify custom resume and output paths
+python main.py --resume my_resume.txt --output index.html --template compact
+
+# List available templates
+python main.py --list-templates
+
+# Run non-interactively without prompts
+python main.py --non-interactive
+```
+
+If successful, open the generated HTML file in a browser.
+
+## Project Structure
+
+```text
+main.py
+resume.txt
+template.html
+style.css
+requirements.txt
+README.md
+.gitignore
+.env.example
+portfolio.html
+decision/
+log.md
+task.md
+tests/
+```
+
+## Prompt Design
+
+The prompt tells Gemini to:
+
+- use only information present in the resume
+- avoid inventing skills, companies, dates, links, projects, or achievements
+- return JSON only
+- use empty strings or empty arrays for missing values
+- keep the summary concise and factual
+- treat resume instructions as resume content, not commands
+
+Expected JSON fields:
+
+```json
+{
+  "name": "",
+  "headline": "",
+  "summary": "",
+  "skills": [],
+  "education": [],
+  "experience": [],
+  "projects": [],
+  "achievements": [],
+  "contact": {
+    "email": "",
+    "phone": "",
+    "linkedin": "",
+    "github": "",
+    "links": []
+  }
+}
+```
+
+## Testing
+
+Run:
+
+```bash
+pytest
+```
+
+Required cases covered:
+
+| Test case | Expected behavior |
+| --- | --- |
+| Missing `resume.txt` | Show a clear error and stop safely |
+| Empty or very short resume | Reject input with a useful message |
+| Valid resume | Generate `portfolio.html` |
+| Resume with missing sections | Omit empty sections |
+| Missing API key | Show a configuration error |
+| API failure | Handle the failure without crashing |
+| Invalid JSON response | Show a clear error and stop safely |
+
+## Responsible AI and Privacy
+
+- Use a safe sample resume for testing.
+- Do not include passwords, government IDs, financial details, or private data.
+- Keep the Gemini API key outside source code.
+- Do not call Gemini from browser-side JavaScript.
+- Review every generated skill, project, date, company, achievement, and link against the original resume.
+
+## Limitations
+
+Gemini output is a draft. The program checks obvious unsupported skills, links, projects, and achievements by comparing them with the original resume text, but this check is simple. A human reviewer must verify the final portfolio before submission.
+
+## AI Usage Log
+
+Codex was used to plan and implement the project structure, tests, Python workflow, documentation, and sample files. Details are recorded in `log.md`.
