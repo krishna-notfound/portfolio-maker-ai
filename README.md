@@ -2,10 +2,22 @@
 
 > Transform your plain-text resume into a stunning, responsive personal portfolio website in seconds using **Google Gemini AI**.
 
+[![Live App](https://img.shields.io/badge/Live%20Demo-Streamlit%20Cloud-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://porfolio-maker-ai-404.streamlit.app/)
+
 [![Python 3.9+](https://img.shields.io/badge/Python-3.9+-blue.svg?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
 [![Google GenAI](https://img.shields.io/badge/Google%20Gemini-Powered-orange.svg?style=flat-square&logo=google)](https://ai.google.dev/)
 [![Streamlit App](https://img.shields.io/badge/Streamlit-Web%20UI-FF4B4B.svg?style=flat-square&logo=streamlit&logoColor=white)](https://streamlit.io/)
 [![Built with Safety](https://img.shields.io/badge/Anti--Hallucination-Built--in-green.svg?style=flat-square)](#-anti-hallucination--verification)
+
+---
+
+## 🌐 Try It Online (No Installation Needed)
+
+You can use the AI Portfolio Generator directly in your web browser:
+
+👉 **[Launch Live Web App on Streamlit Cloud](https://porfolio-maker-ai-404.streamlit.app/)**
+
+> 💡 **Bring Your Own API Key**: Enter your free [Google Gemini API Key](https://aistudio.google.com/app/apikey) in the sidebar to generate portfolios online. Your key is stored securely only for your active browser session.
 
 ---
 
@@ -45,7 +57,7 @@ Portfolio_Generator/
 
 ---
 
-## 🚀 Quick Start Guide
+## 🚀 Local Quick Start Guide
 
 ### 1. Prerequisites & Installation
 
@@ -76,11 +88,11 @@ GEMINI_MODEL=gemini-2.5-flash
 
 ---
 
-## 💻 How to Run
+## 💻 How to Run Locally
 
 ### Option A: 🌐 Web UI Mode (Streamlit) — *Recommended*
 
-Launch the interactive web application in your browser:
+Launch the interactive web application on your local machine:
 
 ```bash
 streamlit run app.py
@@ -101,6 +113,7 @@ streamlit run app.py
 python main.py
 ```
 *Prompts you interactively to choose a template, resume file, and output location.*
+
 
 ---
 
