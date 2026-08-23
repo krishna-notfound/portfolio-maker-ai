@@ -52,5 +52,19 @@ Implement the student project brief for an AI-Assisted Resume Portfolio Generato
   - Prompts user for custom resume input path and output HTML path.
 - Maintained full non-interactive fallback when CLI flags are provided or `--non-interactive` flag is used.
 - Added unit tests for interactive prompts (`prompt_template_choice`, `prompt_text_file`, `interactive_prompt_args`) in `tests/test_main.py`.
-- Updated `README.md` and `task.md` with interactive CLI usage and status.
+
+### Streamlit Web UI Pass
+
+- Created `app.py` to provide a full Streamlit Web UI wrapping CLI functionalities.
+- Added `streamlit` dependency to `requirements.txt`.
+- Enhanced `run()` in `main.py` to accept direct `resume_text` in addition to `resume_path`.
+- Built interactive Streamlit UI features:
+  - Sidebar for API Key input (pre-filled from `.env`), Gemini Model selector, and Template dropdown.
+  - Resume input options (direct text area or file upload `.txt`/`.md`).
+  - Output HTML filename configuration.
+  - One-click portfolio generation with spinner status.
+  - Direct local portfolio URI link (`file:///...`) for easy browser opening.
+  - HTML file download button and live iframe preview inside Streamlit.
+  - Verification & anti-hallucination report alerts.
+
 

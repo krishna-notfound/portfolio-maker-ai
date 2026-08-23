@@ -1,5 +1,4 @@
 from __future__ import annotations
-
 import html
 import argparse
 import json
@@ -206,6 +205,7 @@ def generate_portfolio_html(
 
 def write_output(html_text: str, path: str | Path = "portfolio.html") -> Path:
     output_path = Path(path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(html_text, encoding="utf-8")
     return output_path
 
@@ -213,13 +213,19 @@ def write_output(html_text: str, path: str | Path = "portfolio.html") -> Path:
 def run(
     *,
     resume_path: str | Path = "resume.txt",
+    resume_text: str | None = None,
     output_path: str | Path = "portfolio.html",
     api_key: str | None = None,
     model: str = DEFAULT_MODEL,
     template_name: str = DEFAULT_TEMPLATE,
     templates_dir: str | Path = DEFAULT_TEMPLATES_DIR,
 ) -> RunResult:
-    original_resume = read_resume(resume_path)
+    if resume_text is not None:
+        original_resume = resume_text.strip()
+        validate_resume_text(original_resume)
+    else:
+        original_resume = read_resume(resume_path)
+
     cleaned_resume = clean_resume_text(original_resume)
     selected_key = api_key if api_key is not None else load_api_key()
     extracted = extract_portfolio_data(cleaned_resume, selected_key, model)
@@ -234,6 +240,8 @@ def run(
 def get_template_paths(template_name: str, templates_dir: str | Path = DEFAULT_TEMPLATES_DIR) -> TemplatePaths:
     safe_name = template_name.strip()
     base_dir = Path(templates_dir)
+    if not base_dir.is_absolute() and not base_dir.exists():
+        base_dir = Path(__file__).resolve().parent / base_dir
     template_dir = base_dir / safe_name
     template_path = template_dir / "template.html"
     css_path = template_dir / "style.css"
@@ -245,6 +253,8 @@ def get_template_paths(template_name: str, templates_dir: str | Path = DEFAULT_T
 
 def list_templates(templates_dir: str | Path = DEFAULT_TEMPLATES_DIR) -> list[str]:
     base_dir = Path(templates_dir)
+    if not base_dir.is_absolute() and not base_dir.exists():
+        base_dir = Path(__file__).resolve().parent / base_dir
     if not base_dir.exists():
         return []
     names = []
@@ -254,23 +264,38 @@ def list_templates(templates_dir: str | Path = DEFAULT_TEMPLATES_DIR) -> list[st
     return sorted(names)
 
 
-def load_api_key() -> str:
+def load_env() -> None:
+    env_path = Path(__file__).resolve().parent / ".env"
     try:
         from dotenv import load_dotenv
 
-        load_dotenv()
+        if env_path.exists():
+            load_dotenv(dotenv_path=env_path, override=True)
+        else:
+            load_dotenv(override=True)
     except ImportError:
-        pass
+        if env_path.exists():
+            try:
+                for line in env_path.read_text(encoding="utf-8").splitlines():
+                    line = line.strip()
+                    if not line or line.startswith("#") or "=" not in line:
+                        continue
+                    key, val = line.split("=", 1)
+                    key = key.strip()
+                    val = val.strip().strip("'\"")
+                    if key and (key not in os.environ or not os.environ[key]):
+                        os.environ[key] = val
+            except Exception:
+                pass
+
+
+def load_api_key() -> str:
+    load_env()
     return os.getenv("GEMINI_API_KEY", "").strip()
 
 
 def load_model() -> str:
-    try:
-        from dotenv import load_dotenv
-
-        load_dotenv()
-    except ImportError:
-        pass
+    load_env()
     return os.getenv("GEMINI_MODEL", DEFAULT_MODEL).strip() or DEFAULT_MODEL
 
 
