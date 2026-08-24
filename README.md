@@ -65,7 +65,7 @@ Clone the repository and install the dependencies:
 
 ```bash
 git clone https://github.com/krishna-notfound/portfolio-maker-ai.git
-cd Portfolio_Generator
+cd portfolio-maker-ai
 
 pip install -r requirements.txt
 ```
@@ -83,7 +83,7 @@ Add your [Google Gemini API Key](https://aistudio.google.com/app/apikey):
 
 ```env
 GEMINI_API_KEY=your_actual_gemini_api_key_here
-GEMINI_MODEL=gemini-2.5-flash
+GEMINI_MODEL=gemini-3.1-flash-lite
 ```
 
 ---
