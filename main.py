@@ -9,7 +9,7 @@ from google import genai
 
 # Constants
 MIN_RESUME_LENGTH = 40
-DEFAULT_MODEL = "gemini-2.5-flash"
+DEFAULT_MODEL = "gemini-3.1-flash-lite"
 DEFAULT_TEMPLATE = "classic"
 DEFAULT_TEMPLATES_DIR = Path("templates")
 
