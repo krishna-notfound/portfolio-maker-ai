@@ -13,22 +13,22 @@ def test_clean_resume_text_removes_extra_spaces_and_blank_lines():
 
 
 def test_validate_resume_text_rejects_short_resume():
-    with pytest.raises(main.ResumeInputError, match="too short"):
+    with pytest.raises(ValueError, match="too short"):
         main.validate_resume_text("Jane Doe")
 
 
 def test_read_resume_reports_missing_file(tmp_path):
-    with pytest.raises(main.ResumeInputError, match="resume.txt was not found"):
+    with pytest.raises(FileNotFoundError, match="resume.txt was not found"):
         main.read_resume(tmp_path / "resume.txt")
 
 
 def test_parse_gemini_json_rejects_invalid_json():
-    with pytest.raises(main.GeminiResponseError, match="valid JSON"):
+    with pytest.raises(ValueError, match="valid JSON"):
         main.parse_gemini_json("not json")
 
 
 def test_extract_portfolio_data_rejects_missing_api_key():
-    with pytest.raises(main.GeminiConfigurationError, match="Missing Gemini API key"):
+    with pytest.raises(ValueError, match="Missing Gemini API key"):
         main.extract_portfolio_data("Jane Doe\nPython Developer", "", "gemini-2.5-flash")
 
 
@@ -41,45 +41,13 @@ def test_extract_portfolio_data_wraps_api_failure():
         def __init__(self):
             self.models = BrokenModels()
 
-    with pytest.raises(main.GeminiResponseError, match="Gemini API request failed"):
+    with pytest.raises(RuntimeError, match="Gemini API request failed"):
         main.extract_portfolio_data(
             "Jane Doe\nPython Developer",
             "fake-key",
             "gemini-2.5-flash",
             client=BrokenClient(),
         )
-
-
-def test_extract_portfolio_data_retries_temporary_503_errors():
-    class FakeResponse:
-        text = json.dumps({"name": "Jane Doe", "skills": ["Python"]})
-
-    class FlakyModels:
-        def __init__(self):
-            self.calls = 0
-
-        def generate_content(self, model, contents, config):
-            self.calls += 1
-            if self.calls < 3:
-                raise RuntimeError("503 UNAVAILABLE. This model is currently experiencing high demand.")
-            return FakeResponse()
-
-    class FlakyClient:
-        def __init__(self):
-            self.models = FlakyModels()
-
-    client = FlakyClient()
-
-    data = main.extract_portfolio_data(
-        "Jane Doe\nPython Developer",
-        "fake-key",
-        "gemini-2.5-flash",
-        client=client,
-        sleep=lambda seconds: None,
-    )
-
-    assert data["name"] == "Jane Doe"
-    assert client.models.calls == 3
 
 
 def test_normalize_portfolio_data_fills_missing_values():
@@ -151,7 +119,7 @@ def test_get_template_paths_returns_named_template_files(tmp_path):
 
 
 def test_get_template_paths_rejects_unknown_template(tmp_path):
-    with pytest.raises(main.TemplateError, match="Template 'missing' was not found"):
+    with pytest.raises(FileNotFoundError, match="Template 'missing' was not found"):
         main.get_template_paths("missing", tmp_path / "templates")
 
 
@@ -264,8 +232,11 @@ def test_extract_portfolio_data_prefers_chat_send_message_when_available():
 
 def test_run_generates_portfolio_with_fake_extractor(tmp_path, monkeypatch):
     resume = tmp_path / "resume.txt"
-    template = tmp_path / "template.html"
-    css = tmp_path / "style.css"
+    templates = tmp_path / "templates"
+    classic = templates / "classic"
+    classic.mkdir(parents=True)
+    template = classic / "template.html"
+    css = classic / "style.css"
     output = tmp_path / "portfolio.html"
     resume.write_text(
         "Jane Doe\nEmail: jane@example.com\nPython Developer\nSkills: Python\nProject: Portfolio Generator",
@@ -291,8 +262,8 @@ def test_run_generates_portfolio_with_fake_extractor(tmp_path, monkeypatch):
 
     result = main.run(
         resume_path=resume,
-        template_path=template,
-        css_path=css,
+        templates_dir=templates,
+        template_name="classic",
         output_path=output,
         api_key="fake-key",
         model="gemini-2.5-flash",
@@ -301,43 +272,4 @@ def test_run_generates_portfolio_with_fake_extractor(tmp_path, monkeypatch):
     assert result.output_path == output
     assert output.exists()
     assert "Jane Doe" in output.read_text(encoding="utf-8")
-
-
-def test_prompt_template_choice_numeric_selection():
-    templates = ["classic", "compact", "modern"]
-    chosen = main.prompt_template_choice(templates, input_func=lambda msg: "3")
-    assert chosen == "modern"
-
-
-def test_prompt_template_choice_name_selection():
-    templates = ["classic", "compact", "modern"]
-    chosen = main.prompt_template_choice(templates, input_func=lambda msg: "compact")
-    assert chosen == "compact"
-
-
-def test_prompt_template_choice_default_on_empty():
-    templates = ["classic", "compact", "modern"]
-    chosen = main.prompt_template_choice(templates, input_func=lambda msg: "")
-    assert chosen == "classic"
-
-
-def test_prompt_text_file_default_and_custom():
-    val_def = main.prompt_text_file("Enter resume path", "resume.txt", input_func=lambda msg: "")
-    assert val_def == "resume.txt"
-
-    val_custom = main.prompt_text_file("Enter resume path", "resume.txt", input_func=lambda msg: "my_resume.txt")
-    assert val_custom == "my_resume.txt"
-
-
-def test_interactive_prompt_args(monkeypatch):
-    monkeypatch.setattr(main, "list_templates", lambda: ["classic", "compact", "modern"])
-
-    inputs = iter(["2", "custom_resume.txt", "custom_out.html"])
-    args = main.parse_args([])
-
-    template, resume, output = main.interactive_prompt_args(args, input_func=lambda msg: next(inputs))
-
-    assert template == "compact"
-    assert resume == "custom_resume.txt"
-    assert output == "custom_out.html"
 

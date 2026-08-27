@@ -1,98 +1,161 @@
 :root {
-    --ink: #191919;
-    --muted: #6b7280;
-    --paper: #fbfbf7;
-    --page: #dfe7e2;
-    --line: #b9c5bf;
-    --accent: #b42318;
+    color-scheme: dark;
+    --bg-page: #0d1117;
+    --bg-card: #161b22;
+    --bg-hover: #1f242c;
+    --border: #30363d;
+    --text-primary: #f0f6fc;
+    --text-secondary: #8b949e;
+    --accent: #58a6ff;
+    --accent-gradient: linear-gradient(135deg, #58a6ff 0%, #bc8cff 100%);
+    --tag-bg: #21262d;
+    --tag-border: #363b42;
+    --tag-text: #79c0ff;
+    --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--border);
 }
 
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    margin: 0;
-    background: var(--page);
-    color: var(--ink);
-    font-family: Georgia, "Times New Roman", serif;
+    background: var(--bg-page);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     line-height: 1.65;
+    padding: 40px 16px;
+    min-height: 100vh;
 }
 
 .page {
-    width: min(980px, calc(100% - 28px));
-    margin: 28px auto;
-    background: var(--paper);
-    border-left: 8px solid var(--accent);
-    padding: 42px;
+    max-width: 860px;
+    margin: 0 auto;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 48px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
 }
 
 .hero {
-    margin-bottom: 30px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 32px;
+    margin-bottom: 36px;
 }
 
 h1 {
-    margin: 0;
-    font-size: 2.7rem;
-    line-height: 1;
+    font-size: 2.6rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
 }
 
 .headline {
-    margin: 10px 0 0;
-    color: var(--accent);
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-bottom: 20px;
 }
 
 .contact {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px 18px;
-    margin-top: 18px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 0.95rem;
+    gap: 10px 14px;
+    margin-top: 16px;
 }
 
-a {
+.contact a, .contact span {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    background: var(--tag-bg);
+    border: 1px solid var(--tag-border);
+    border-radius: 20px;
     color: var(--accent);
+    font-size: 0.88rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.contact a:hover {
+    background: var(--accent);
+    color: #ffffff;
+    border-color: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(88, 166, 255, 0.3);
 }
 
 .section {
-    border-top: 1px solid var(--line);
-    padding-top: 18px;
-    margin-top: 22px;
+    margin-top: 32px;
 }
 
 h2 {
-    margin: 0 0 8px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 1rem;
-    letter-spacing: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
     text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-p,
+h2::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+p {
+    color: var(--text-primary);
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
 ul {
-    margin: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-ul {
-    padding-left: 20px;
+li {
+    position: relative;
+    padding-left: 24px;
+    color: var(--text-primary);
+    font-size: 0.98rem;
+    line-height: 1.6;
 }
 
-li + li {
-    margin-top: 7px;
+li::before {
+    content: "▹";
+    position: absolute;
+    left: 4px;
+    color: var(--accent);
+    font-size: 1.1rem;
 }
 
 @media (max-width: 640px) {
-    .page {
-        width: min(100% - 18px, 980px);
-        margin: 9px auto;
-        padding: 26px;
-        border-left-width: 5px;
+    body {
+        padding: 16px 8px;
     }
-
+    .page {
+        padding: 24px 20px;
+        border-radius: 12px;
+    }
     h1 {
         font-size: 2rem;
+    }
+    .headline {
+        font-size: 1.05rem;
     }
 }

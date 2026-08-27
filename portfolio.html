@@ -6,101 +6,145 @@
     <title>Generated Portfolio</title>
     <style>
 :root {
-    --ink: #191919;
-    --muted: #6b7280;
-    --paper: #fbfbf7;
-    --page: #dfe7e2;
-    --line: #b9c5bf;
-    --accent: #b42318;
+    color-scheme: light;
+    --bg-page: #f8fafc;
+    --bg-card: #ffffff;
+    --border: #e2e8f0;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --accent: #0d9488;
+    --accent-dark: #0f766e;
+    --accent-light: #f0fdfa;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.07);
 }
 
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    margin: 0;
-    background: var(--page);
-    color: var(--ink);
-    font-family: Georgia, "Times New Roman", serif;
+    background: var(--bg-page);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     line-height: 1.65;
+    padding: 48px 16px;
+    min-height: 100vh;
 }
 
 .page {
-    width: min(980px, calc(100% - 28px));
-    margin: 28px auto;
-    background: var(--paper);
-    border-left: 8px solid var(--accent);
-    padding: 42px;
+    max-width: 880px;
+    margin: 0 auto;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 48px 52px;
+    box-shadow: var(--shadow);
 }
 
 .hero {
-    margin-bottom: 30px;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 28px;
+    margin-bottom: 32px;
 }
 
 h1 {
-    margin: 0;
-    font-size: 2.7rem;
-    line-height: 1;
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    margin-bottom: 6px;
 }
 
 .headline {
-    margin: 10px 0 0;
-    color: var(--accent);
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--accent-dark);
+    font-weight: 600;
+    margin-bottom: 16px;
 }
 
 .contact {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px 18px;
-    margin-top: 18px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 0.95rem;
+    gap: 8px 12px;
+    margin-top: 14px;
 }
 
-a {
-    color: var(--accent);
+.contact a, .contact span {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    background: var(--accent-light);
+    border: 1px solid #99f6e4;
+    border-radius: 6px;
+    color: var(--accent-dark);
+    font-size: 0.88rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+
+.contact a:hover {
+    background: var(--accent-dark);
+    color: #ffffff;
+    border-color: var(--accent-dark);
 }
 
 .section {
-    border-top: 1px solid var(--line);
-    padding-top: 18px;
-    margin-top: 22px;
+    margin-top: 30px;
 }
 
 h2 {
-    margin: 0 0 8px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    border-left: 4px solid var(--accent);
+    padding-left: 12px;
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+}
+
+p {
+    color: var(--text-primary);
     font-size: 1rem;
-    letter-spacing: 0;
-    text-transform: uppercase;
-}
-
-p,
-ul {
-    margin: 0;
+    line-height: 1.7;
 }
 
 ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+li {
+    position: relative;
     padding-left: 20px;
+    color: var(--text-primary);
+    font-size: 0.98rem;
+    line-height: 1.6;
 }
 
-li + li {
-    margin-top: 7px;
+li::before {
+    content: "•";
+    position: absolute;
+    left: 4px;
+    color: var(--accent);
+    font-size: 1.3rem;
+    line-height: 1;
+    top: -1px;
 }
 
 @media (max-width: 640px) {
-    .page {
-        width: min(100% - 18px, 980px);
-        margin: 9px auto;
-        padding: 26px;
-        border-left-width: 5px;
+    body {
+        padding: 16px 8px;
     }
-
+    .page {
+        padding: 28px 20px;
+    }
     h1 {
-        font-size: 2rem;
+        font-size: 1.9rem;
     }
 }
 
@@ -111,16 +155,13 @@ li + li {
 <section class="hero">
 <h1>Jane Doe</h1>
 <p class="headline">Python Developer</p>
-<div class="contact"><a href="mailto:jane@example.com">jane@example.com</a>
-<span>+1 555 010 1234</span>
-<a href="https://linkedin.com/in/janedoe" target="_blank" rel="noreferrer">https://linkedin.com/in/janedoe</a>
-<a href="https://github.com/janedoe" target="_blank" rel="noreferrer">https://github.com/janedoe</a></div>
+<div class="contact"><a href="mailto:jane@example.com">jane@example.com</a><span>+1 555 010 1234</span><a href="https://linkedin.com/in/janedoe" target="_blank" rel="noreferrer">https://linkedin.com/in/janedoe</a><a href="https://github.com/janedoe" target="_blank" rel="noreferrer">https://github.com/janedoe</a></div>
 </section>
 <section class="section"><h2>Professional Summary</h2><p>Python Developer focused on automation, data handling, and simple web projects.</p></section>
 <section class="section"><h2>Skills</h2><ul><li>Python</li><li>JSON</li><li>HTML</li><li>CSS</li><li>Git</li><li>API integration</li></ul></section>
-<section class="section"><h2>Education</h2><ul><li>B.Tech in Computer Science: Institution: GLA University</li></ul></section>
-<section class="section"><h2>Experience</h2><ul><li>CodeLab. Built Python scripts for data cleaning and report generation</li></ul></section>
-<section class="section"><h2>Projects</h2><ul><li>Resume Portfolio Generator: Python application that reads resume text, calls Gemini, parses JSON, and generates HTML</li><li>Student Result Analyzer: Python project that processes CSV data and creates summary reports</li></ul></section>
+<section class="section"><h2>Education</h2><ul><li>B.Tech in Computer Science, GLA University, 2026</li></ul></section>
+<section class="section"><h2>Experience</h2><ul><li>Software Intern at CodeLab, June 2025 to August 2025. Built Python scripts for data cleaning and report generation.</li></ul></section>
+<section class="section"><h2>Projects</h2><ul><li>Resume Portfolio Generator: Python application that reads resume text, calls Gemini, parses JSON, and generates HTML.</li><li>Student Result Analyzer: Python project that processes CSV data and creates summary reports.</li></ul></section>
 <section class="section"><h2>Achievements</h2><ul><li>Completed AIML GLA Bootcamp 2026 project milestone.</li></ul></section>
 </main>
 </body>
